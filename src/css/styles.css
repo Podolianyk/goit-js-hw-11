@@ -10,6 +10,12 @@
 .container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+}
+
+.form {
+  display: flex;
+    justify-content: center;
 }
 
 input {
@@ -49,5 +55,15 @@ button {
   line-height: 1.5;
   letter-spacing: 0.04em;
   color: #fff;
+}
+
+.js-image-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.image-info {
+  display: flex;
+    flex-direction: row;
 }
 
