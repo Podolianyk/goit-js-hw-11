@@ -1,21 +1,25 @@
-import"./assets/vendor-db7463ae.js";(function(){const r=document.createElement("link").relList;if(r&&r.supports&&r.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))n(e);new MutationObserver(e=>{for(const t of e)if(t.type==="childList")for(const i of t.addedNodes)i.tagName==="LINK"&&i.rel==="modulepreload"&&n(i)}).observe(document,{childList:!0,subtree:!0});function o(e){const t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?t.credentials="include":e.crossOrigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function n(e){if(e.ep)return;e.ep=!0;const t=o(e);fetch(e.href,t)}})();//! напиши всю логіку роботи додатка
-const a=document.querySelector(".form"),c=document.querySelector(".js-image-container");//! 1. подія
-a.addEventListener("submit",s=>{s.preventDefault();const r=s.target.elements.request.value;console.log(r);//! видалити
-l(r).then(o=>{const n=u(o);c.insertAdjacentHTML("beforeend",n),console.log(o);//! видалити
-}).catch(o=>{console.log(o)})});//! 2. запит
-function l(s){const r="https://pixabay.com/api/",o=new URLSearchParams({key:"43032032-8eb24f10be4f06f56a6a96441",q:s,image_type:"photo",orientation:"horizontal",safesearch:!0}),n=`${r}?${o}`;console.log(n);//! видалити
-return fetch(n).then(e=>{if(!e.ok)throw new Error(e.status);return e.json()})}//! 3. рендер
-function u({webformatURL:s,largeImageURL:r,tags:o,likes:n,views:e,comments:t,downloads:i}){return`<div class="gallery">
-  <div class = "image-container">
-    <a class="gallery-link" href="${s}">
-    <img class="gallery-image"
-    src="${r}" alt="${o}"/>
-    </a>
+import{i as a,S as m}from"./assets/vendor-5b791d57.js";(function(){const r=document.createElement("link").relList;if(r&&r.supports&&r.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))s(e);new MutationObserver(e=>{for(const t of e)if(t.type==="childList")for(const l of t.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&s(l)}).observe(document,{childList:!0,subtree:!0});function o(e){const t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin==="use-credentials"?t.credentials="include":e.crossOrigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function s(e){if(e.ep)return;e.ep=!0;const t=o(e);fetch(e.href,t)}})();function d(i){const r="https://pixabay.com/api/",o=new URLSearchParams({key:"43032032-8eb24f10be4f06f56a6a96441",q:i,image_type:"photo",orientation:"horizontal",safesearch:!0}),s=`${r}?${o}`;return fetch(s).then(e=>{if(!e.ok)throw new Error(e.status);return e.json()})}function g({webformatURL:i,largeImageURL:r,tags:o,likes:s,views:e,comments:t,downloads:l}){return`<li class="gallery-item">
+          <a class="gallery-link" href="${i}">
+        <img class="gallery-image" src="${r}" alt="${o}" />
+      </a>
+        <div class="image-info">
+    <ul class="infoBlock">
+    <li class="title">Likes</li>
+    <li class="info">${s}</li>
+    </ul>
+    <ul class="infoBlock">
+    <li class="title">Views</li>
+    <li class="info">${e}</li>
+    </ul>
+    <ul class="infoBlock">
+    <li class="title">Comments</li>
+    <li class="info">${t}</li>
+    </ul>
+    <ul class="infoBlock">
+    <li class="title">Downloads</li>
+    <li class="info">${l}</li>
+    </ul>
     </div>
-    <div class="image-info">
-<span>likes: ${n}</span>
-<span>views: ${e}</span>
-<span>comments: ${t}</span>
-<span>downloads: ${i}</span>
- </div></div>`}
+  </li>`}function p(i){return i.map(g).join("")}//! напиши всю логіку роботи додатка
+const c=document.querySelector(".form"),u=document.querySelector(".gallery"),n=document.querySelector(".loader");console.log(n);function f(){n.classList.add("is-hidden")}function h(){n.classList.remove("is-hidden")}c.addEventListener("submit",i=>{i.preventDefault(),h(),u.innerHTML="";const r=i.target.elements.request.value.trim();if(!r){a.error({message:"Please enter a request",position:"topRight"});return}d(r).then(o=>{if(o.hits.length===0){a.error({message:"Sorry, there are no images matching your search query. Please try again!",position:"topRight"});return}const s=p(o.hits);u.insertAdjacentHTML("beforeend",s),y.refresh(),f()}).catch(o=>{console.log(o),f()}),c.reset()});const y=new m(".gallery a",{captionsData:"alt",captionPosition:"bottom",captionDelay:250});
 //# sourceMappingURL=commonHelpers.js.map
