@@ -6,72 +6,60 @@ import 'izitoast/dist/css/iziToast.min.css'; // Додатковий імпор�
 import SimpleLightbox from 'simplelightbox'; // Описаний у документації
 import 'simplelightbox/dist/simple-lightbox.min.css'; // Додатковий імпорт стилів
 
-// import { getImages } from './js/pixabay-api';
-// import { galleryTemplate } from './js/render-functions';
+import { getImages } from './js/pixabay-api';
+import { imagesTemplate } from './js/render-functions';
 
-const formEl = document.querySelector('.form'); // доступ до форми
-const imageContainer = document.querySelector('.js-image-container'); // доступ до контейнеру
+const formEl = document.querySelector('.form');
+const gallery = document.querySelector('.gallery');
+const loaderEl = document.querySelector('.loader');
+console.log(loaderEl);
 
-//! 1. подія
+function deleteLoader() {
+  loaderEl.classList.add('is-hidden');
+}
+
+function createLoader() {
+  loaderEl.classList.remove('is-hidden');
+}
+
 formEl.addEventListener('submit', e => {
   e.preventDefault();
-  const query = e.target.elements.request.value;
-  console.log(query); //! видалити
+  createLoader();
+  gallery.innerHTML = '';
+  const query = e.target.elements.request.value.trim();
+
+  if (!query) {
+    iziToast.error({
+      message: 'Please enter a request',
+      position: 'topRight',
+    });
+    return;
+  }
 
   getImages(query)
     .then(data => {
-      const markup = imageTemplate(data);
-      imageContainer.insertAdjacentHTML('beforeend', markup);
-      console.log(data); //! видалити
+      if (data.hits.length === 0) {
+        iziToast.error({
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+          position: 'topRight',
+        });
+        return;
+      }
+      const markup = imagesTemplate(data.hits);
+      gallery.insertAdjacentHTML('beforeend', markup);
+      lightbox.refresh();
+      deleteLoader();
     })
     .catch(err => {
       console.log(err);
+      deleteLoader();
     });
+  formEl.reset();
 });
 
-//! 2. запит
-function getImages(query) {
-  const BASE_URL = 'https://pixabay.com/api/';
-  const params = new URLSearchParams({
-    key: '43032032-8eb24f10be4f06f56a6a96441',
-    q: query,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: true,
-  });
-
-  const url = `${BASE_URL}?${params}`;
-  console.log(url); //! видалити
-
-  return fetch(url).then(response => {
-    if (!response.ok) {
-      throw new Error(response.status);
-    }
-    return response.json();
-  });
-}
-
-//! 3. рендер
-function imageTemplate({
-  webformatURL,
-  largeImageURL,
-  tags,
-  likes,
-  views,
-  comments,
-  downloads,
-}) {
-  return `<div class="gallery">
-  <div class = "image-container">
-    <a class="gallery-link" href="${webformatURL}">
-    <img class="gallery-image"
-    src="${largeImageURL}" alt="${tags}"/>
-    </a>
-    </div>
-    <div class="image-info">
-<span>likes: ${likes}</span>
-<span>views: ${views}</span>
-<span>comments: ${comments}</span>
-<span>downloads: ${downloads}</span>
- </div></div>`;
-}
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
