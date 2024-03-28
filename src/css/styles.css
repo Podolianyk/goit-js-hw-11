@@ -71,9 +71,9 @@ img {
 .gallery {
   display: flex;
   flex-direction: row;
+  row-gap: 10px;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10px;
   margin: 0 auto;
 }
 

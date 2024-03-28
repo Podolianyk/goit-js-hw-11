@@ -12,7 +12,6 @@ import { imagesTemplate } from './js/render-functions';
 const formEl = document.querySelector('.form');
 const gallery = document.querySelector('.gallery');
 const loaderEl = document.querySelector('.loader');
-console.log(loaderEl);
 
 function deleteLoader() {
   loaderEl.classList.add('is-hidden');
@@ -22,6 +21,7 @@ function createLoader() {
   loaderEl.classList.remove('is-hidden');
 }
 
+deleteLoader();
 formEl.addEventListener('submit', e => {
   e.preventDefault();
   createLoader();
@@ -29,6 +29,7 @@ formEl.addEventListener('submit', e => {
   const query = e.target.elements.request.value.trim();
 
   if (!query) {
+    deleteLoader();
     iziToast.error({
       message: 'Please enter a request',
       position: 'topRight',
@@ -39,6 +40,7 @@ formEl.addEventListener('submit', e => {
   getImages(query)
     .then(data => {
       if (data.hits.length === 0) {
+        deleteLoader();
         iziToast.error({
           message:
             'Sorry, there are no images matching your search query. Please try again!',
